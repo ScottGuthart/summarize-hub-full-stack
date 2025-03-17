@@ -8,6 +8,7 @@ import pandas as pd
 from filelock import FileLock
 from pyarrow.parquet import ParquetFile
 from app.datafile_utils import append_column
+import sys
 
 app = create_app()
 app.app_context().push()
@@ -32,6 +33,8 @@ def _set_task_progress(
 
     if job: 
         job.meta["progress"] = progress
+        if progress_message is not None:
+            job.meta["progress_message"] = progress_message
         job.save_meta()
         task = Task.query.get(task_id)
         for k, v in kwargs.items():
@@ -58,7 +61,15 @@ def _set_task_progress(
 
 
 def summarize():
-    def run_batch(llm, template, inputs, content_only=True, progress_start=0, progress_end=100, progress_message=None):
+    def run_batch(
+        llm,
+        template,
+        inputs,
+        content_only=True,
+        progress_start=0,
+        progress_end=100,
+        progress_message=None
+    ):
         """
         Takes a list of inputs and evaluates the templated prompts on each.
         
@@ -96,7 +107,7 @@ def summarize():
         
         return results
     
-    _set_task_progress(0)
+    _set_task_progress(0, progress_message="Reading file...")
     try:
         fn = _get_task_filename()
         # Initialize the model
@@ -149,10 +160,21 @@ def summarize():
         append_column(fn, 'Summary', summaries)
         append_column(fn, 'Tags', tags)
 
-        _set_task_progress(95)
+        _set_task_progress(
+            100,
+            succeeded=True,
+            progress_message="Processing complete!"
+        )
 
     except Exception as e:
-        _set_task_progress(100, progress_message=str(e), succeeded=False)
-        raise Exception(e)
-    finally:
-        _set_task_progress(100)
+        exception_string = str(e)
+        if "Max retries exceeded with url: /api/chat" in exception_string:
+            error_message = "LLM server not responding."
+        else:
+            error_message = f"Error processing file: {str(e)}"
+        _set_task_progress(
+            100,
+            progress_message=error_message,
+            succeeded=False
+        )
+        app.logger.error('Unhandled exception', exc_info=sys.exc_info())

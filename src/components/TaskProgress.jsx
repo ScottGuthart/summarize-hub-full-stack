@@ -58,8 +58,9 @@ const TaskProgress = ({ task, onReset }) => {
           clearInterval(pollInterval)
           setProgress(100)
           setIsComplete(true)
-          setIsSuccessful(taskData.succeeded !== false)
+          setIsSuccessful(taskData.succeeded)
           setStatus(taskData.succeeded ? 'Processing complete!' : 'Processing failed')
+          setMessage(taskData.progress_message || '')
         } else {
           setProgress(taskData.progress || 0)
           setStatus(`Processing: ${taskData.progress || 0}%`)
@@ -68,6 +69,7 @@ const TaskProgress = ({ task, onReset }) => {
       } catch (error) {
         console.error('Error polling task:', error)
         setStatus(`Error checking progress: ${error.message}`)
+        setMessage('Failed to check task status')
         clearInterval(pollInterval)
       }
     }
@@ -96,8 +98,8 @@ const TaskProgress = ({ task, onReset }) => {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <p className="status-message">{status}</p>
-      {message && <p className="progress-message">{message}</p>}
+      <p className={`status-message ${isComplete && !isSuccessful ? 'error' : ''}`}>{status}</p>
+      {message && !isSuccessful && <p className={`progress-message ${isComplete && !isSuccessful ? 'error' : ''}`}>{message}</p>}
       <div className="button-container">
         {isComplete && isSuccessful && (
           <button onClick={handleDownload} className="download-button">

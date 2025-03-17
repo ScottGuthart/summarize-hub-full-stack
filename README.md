@@ -21,23 +21,18 @@
 4. **Python Environment**
 
    ```bash
-   python -m venv api/venv/
-   source api/venv/bin/activate
-   pip install -r ../requirements.txt
+   cd api
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   flask db upgrade
    ```
 
    Note: Developed with Python 3.9.19
 
-5. **Database**
-   ```bash
-   cd api
-   source venv/bin/activate
-   flask db upgrade
-   ```
-
 ## Running the App
 
-You will need three separate processes running: Redis server, RQ worker, and Flask server.
+You will need four separate processes running in different terminal windows: Ollama, Redis server, RQ worker, and Flask server.
 
 1. **Redis**
 
@@ -45,20 +40,24 @@ You will need three separate processes running: Redis server, RQ worker, and Fla
    redis-server
    ```
 
-2. **Worker**
+2. **Ollama (llm)**
+
+`ollama serve`
+
+3. **Worker**
 
    ```bash
-   cd api
+   # in ./api
    source venv/bin/activate
    export FLASK_APP=flaskapp.py
 
-   # on mac only:
+   # on mac only (for rq):
    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
    rq worker flaskapp-tasks
    ```
 
-3. **Flask**
+4. **Flask**
 
    ```bash
    cd api
@@ -67,7 +66,7 @@ You will need three separate processes running: Redis server, RQ worker, and Fla
    flask run
    ```
 
-4. Navigate to http://127.0.0.1:5000/ in your web browser.
+5. Navigate to http://127.0.0.1:5000/ in your web browser.
 
 ## Approach
 
@@ -89,14 +88,12 @@ SummarizeHub processes articles in two steps:
 
 ### Error Handling
 
-- LLM not running
 - File issues
-- Processing failures
 - Article length limits
-- Text chunking
 
 ### General
 
+- Text chunking
 - File cleanup
 
 ## Future Improvements

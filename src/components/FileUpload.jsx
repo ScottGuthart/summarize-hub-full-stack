@@ -37,7 +37,11 @@ const FileUpload = ({ onTaskCreated }) => {
       onTaskCreated(taskData)
     } catch (error) {
       console.error('Upload error:', error)
-      setUploadStatus(`Upload failed: ${error.message}`)
+      let errorMessage = error?.message || 'Upload failed'
+      if (errorMessage.includes("Failed to execute 'json'")) {
+        errorMessage = 'Unable to reach server'
+      }
+      setUploadStatus(`Upload failed: ${errorMessage}`)
     }
   }
 

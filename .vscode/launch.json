@@ -1,0 +1,50 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}/api",
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flaskapp",
+            "env": {
+                "FLASK_APP": "flaskapp",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                // "run",
+                // "--no-debugger"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "rq worker1",
+            "request": "launch",
+            "type": "python",
+            "program": "${workspaceFolder}/api/venv/bin/rq",
+            "args": [
+                "worker",
+                "flaskapp-tasks",
+                "--verbose",
+                "--logging_level",
+                "DEBUG",
+                "--worker-ttl",
+                "600"
+
+            ],
+            "env": {
+                "OBJC_DISABLE_INITIALIZE_FORK_SAFETY": "YES",
+                "NO_PROXY": "*"
+            },
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/api",
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

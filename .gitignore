@@ -1,0 +1,54 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/dist
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.python-version
+nohup.out
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/
+
+# flask / python
+*.env
+api/venv/
+api/.venv/
+/api/venv/
+/api/.venv/
+.venv/
+.env/
+api/.env
+
+_pycache
+dump.rdb
+*.pyc
+app.db
+api/logs
+api/instance/*
+
+~$*
+.vscode/settings.json
+
+#
+dist/
+logs/
+
+# parquet files
+*.parquet
+
+.ipynb_checkpoints/
+notebooks/

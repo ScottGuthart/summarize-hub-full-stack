@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "rq worker",
+            "type": "shell",
+            "command": "${workspaceFolder}/api/venv/bin/rq worker flaskapp-tasks",
+            "dependsOn": ["redis-server"]
+        },
+        {
+            "label": "redis-server",
+            "type": "shell",
+            "command": "redis-server &",
+        }
+    ]
+}

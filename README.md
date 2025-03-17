@@ -60,13 +60,15 @@ You will need four separate processes running in different terminal windows: Oll
 4. **Flask**
 
    ```bash
-   cd api
+   # in ./api
    source venv/bin/activate
    export FLASK_APP=flaskapp.py
    flask run
    ```
 
 5. Navigate to http://127.0.0.1:5000/ in your web browser.
+
+6. Upload example
 
 ## Approach
 
@@ -86,10 +88,11 @@ SummarizeHub processes articles in two steps:
 
 ## TODO
 
-### Error Handling
+### Error Handling / Checking
 
-- File issues
-- Article length limits
+- File too big
+- Article too long
+- Too many articles
 
 ### General
 
@@ -98,4 +101,8 @@ SummarizeHub processes articles in two steps:
 
 ## Future Improvements
 
-- Dynamic context window based on LLM
+- Chatbot
+
+  - Query pandas dataframe
+
+- Support other LLMS

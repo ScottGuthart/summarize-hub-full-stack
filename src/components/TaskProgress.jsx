@@ -58,7 +58,7 @@ const TaskProgress = ({ task, onReset }) => {
           clearInterval(pollInterval)
           setProgress(100)
           setIsComplete(true)
-          setIsSuccessful(taskData.succeeded)
+          setIsSuccessful(taskData.succeeded !== false)
           setStatus(taskData.succeeded ? 'Processing complete!' : 'Processing failed')
         } else {
           setProgress(taskData.progress || 0)
